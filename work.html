@@ -1,0 +1,420 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Work — Deepthi Putti</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300..900;1,9..144,300..900&family=JetBrains+Mono:wght@400;500;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #0e0e10;
+    --paper: #fdfcf9;
+    --paper-dim: #f3f1ea;
+    --signal: #ff4d2e;
+    --violet: #7c5cff;
+    --lime: #c8ff4d;
+    --muted: #8a8a86;
+    --border: rgba(14,14,16,0.12);
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    background: var(--paper);
+    color: var(--ink);
+    font-family: 'Inter', sans-serif;
+    overflow-x: hidden;
+  }
+
+  /* ============ NAV ============ */
+  nav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 90;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 1.4rem 3.5rem;
+    background: rgba(253,252,249,0.85);
+    backdrop-filter: blur(14px);
+    border-bottom: 1px solid var(--border);
+  }
+  .nav-logo {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem; font-weight: 700; color: var(--ink);
+    text-decoration: none;
+  }
+  .nav-logo .dot { color: var(--signal); }
+  .nav-links { display: flex; gap: 2.2rem; list-style: none; }
+  .nav-links a {
+    text-decoration: none; color: var(--ink);
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem; letter-spacing: 0.04em;
+  }
+  .nav-links a:hover { color: var(--signal); }
+
+  /* ============ PAGE HEADER ============ */
+  #page-header {
+    padding: 9rem 3.5rem 3rem;
+  }
+  .ph-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--signal); margin-bottom: 1rem;
+  }
+  .ph-title {
+    font-family: 'Fraunces', serif; font-weight: 500;
+    font-size: clamp(2.4rem, 6vw, 4.6rem); line-height: 1.05;
+    max-width: 800px;
+  }
+  .ph-title em { font-style: italic; color: var(--violet); }
+  .ph-sub {
+    font-size: 1.05rem; color: var(--muted); max-width: 540px;
+    margin-top: 1.4rem; line-height: 1.7;
+  }
+
+  /* ============ QUERY BAR — signature interactive element ============ */
+  #query-console {
+    margin: 0 3.5rem 3rem;
+    background: var(--ink);
+    border-radius: 16px;
+    padding: 1.4rem 1.6rem;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .qc-top {
+    display: flex; align-items: center; gap: 0.7rem;
+    color: var(--lime); font-size: 0.85rem; margin-bottom: 1rem;
+  }
+  .qc-prompt { color: var(--muted); }
+  #queryInput {
+    background: transparent; border: none; outline: none;
+    color: var(--paper); font-family: 'JetBrains Mono', monospace;
+    font-size: 0.95rem; flex: 1; caret-color: var(--lime);
+  }
+  #queryInput::placeholder { color: rgba(253,252,249,0.3); }
+  .qc-filters { display: flex; gap: 0.6rem; flex-wrap: wrap; }
+  .qc-filter {
+    font-size: 0.78rem; padding: 0.4rem 0.9rem; border-radius: 100px;
+    border: 1px solid rgba(253,252,249,0.18); color: rgba(253,252,249,0.65);
+    cursor: pointer; transition: all 0.18s; background: transparent;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .qc-filter:hover { border-color: rgba(253,252,249,0.4); color: var(--paper); }
+  .qc-filter.active {
+    background: var(--lime); color: var(--ink); border-color: var(--lime);
+  }
+  .qc-result-count {
+    margin-top: 1rem; font-size: 0.78rem; color: var(--muted);
+  }
+  .qc-result-count b { color: var(--lime); }
+
+  /* ============ PROJECTS GRID ============ */
+  #projects {
+    padding: 0 3.5rem 7rem;
+    display: grid; grid-template-columns: repeat(2, 1fr); gap: 1.4rem;
+  }
+  .project-card {
+    background: #ffffff;
+    border: 1px solid var(--border);
+    border-radius: 18px;
+    padding: 2.2rem;
+    display: flex; flex-direction: column;
+    text-decoration: none; color: inherit;
+    transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), box-shadow 0.3s, border-color 0.3s;
+    position: relative;
+  }
+  .project-card[hidden] { display: none; }
+  .project-card:hover { transform: translateY(-5px); box-shadow: 0 18px 44px rgba(14,14,16,0.09); border-color: rgba(14,14,16,0.2); }
+  .pc-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 1.4rem; }
+  .pc-idx { font-family: 'JetBrains Mono', monospace; font-size: 0.78rem; color: var(--muted); }
+  .pc-cat {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+    text-transform: uppercase; letter-spacing: 0.06em;
+    padding: 0.3rem 0.7rem; border-radius: 100px;
+  }
+  .cat-da { background: rgba(255,77,46,0.1); color: var(--signal); }
+  .cat-ml { background: rgba(124,92,255,0.1); color: var(--violet); }
+  .cat-ai { background: rgba(200,255,77,0.18); color: #5a7a18; }
+  .pc-title {
+    font-family: 'Fraunces', serif; font-weight: 500;
+    font-size: 1.5rem; margin-bottom: 0.7rem; line-height: 1.15;
+  }
+  .pc-desc { font-size: 0.94rem; color: var(--muted); line-height: 1.65; flex: 1; margin-bottom: 1.4rem; }
+  .pc-tools { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 1.6rem; }
+  .pc-tool {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+    padding: 0.28rem 0.65rem; border-radius: 6px;
+    background: var(--paper-dim); color: var(--ink);
+  }
+  .pc-link {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; font-weight: 500;
+    display: flex; align-items: center; gap: 0.4rem; margin-top: auto;
+  }
+  .pc-link svg { transition: transform 0.2s; }
+  .project-card:hover .pc-link svg { transform: translateX(4px); }
+
+  .empty-state {
+    grid-column: 1 / -1;
+    text-align: center; padding: 4rem 2rem;
+    font-family: 'JetBrains Mono', monospace; color: var(--muted);
+  }
+
+  /* ============ SKILLS ============ */
+  #skills { padding: 6rem 3.5rem; background: var(--ink); color: var(--paper); }
+  .sk-label {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.78rem; letter-spacing: 0.1em; text-transform: uppercase;
+    color: var(--lime); margin-bottom: 1rem;
+  }
+  .sk-title {
+    font-family: 'Fraunces', serif; font-weight: 500;
+    font-size: clamp(1.8rem, 4vw, 2.8rem); margin-bottom: 3rem;
+  }
+  .sk-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.2rem; }
+  .sk-group {
+    border: 1px solid rgba(253,252,249,0.12); border-radius: 14px;
+    padding: 1.6rem;
+  }
+  .sk-group-name {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.72rem;
+    text-transform: uppercase; letter-spacing: 0.06em; color: var(--violet);
+    margin-bottom: 1rem;
+  }
+  .sk-pills { display: flex; flex-wrap: wrap; gap: 0.4rem; }
+  .sk-pill {
+    font-size: 0.82rem; padding: 0.3rem 0.75rem; border-radius: 100px;
+    border: 1px solid rgba(253,252,249,0.18); color: rgba(253,252,249,0.8);
+  }
+
+  /* ============ CONTACT ============ */
+  #contact {
+    padding: 8rem 3.5rem; text-align: center;
+  }
+  .ct-label {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.78rem;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--signal);
+    margin-bottom: 1.2rem;
+  }
+  .ct-title {
+    font-family: 'Fraunces', serif; font-weight: 500;
+    font-size: clamp(2rem, 4.6vw, 3.4rem); max-width: 700px; margin: 0 auto 1rem;
+  }
+  .ct-title em { font-style: italic; color: var(--violet); }
+  .ct-sub { color: var(--muted); margin-bottom: 2.4rem; }
+  .ct-actions { display: flex; justify-content: center; gap: 1rem; flex-wrap: wrap; }
+  .btn {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.85rem; font-weight: 500;
+    padding: 0.95rem 1.9rem; border-radius: 100px; text-decoration: none;
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    transition: transform 0.2s, background 0.2s;
+  }
+  .btn-fill { background: var(--ink); color: var(--paper); }
+  .btn-fill:hover { transform: translateY(-2px); background: var(--signal); }
+  .btn-line { border: 1px solid var(--border); color: var(--ink); }
+  .btn-line:hover { transform: translateY(-2px); border-color: var(--ink); }
+
+  footer.site-footer {
+    display: flex; justify-content: space-between; padding: 2.4rem 3.5rem;
+    border-top: 1px solid var(--border);
+    font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; color: var(--muted);
+  }
+  footer.site-footer a { color: var(--muted); text-decoration: none; }
+
+  .reveal { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+  .reveal.visible { opacity: 1; transform: translateY(0); }
+
+  @media (max-width: 900px) {
+    nav, #page-header, #skills, #contact, footer.site-footer { padding-left: 1.5rem; padding-right: 1.5rem; }
+    #query-console { margin-left: 1.5rem; margin-right: 1.5rem; }
+    #projects { padding-left: 1.5rem; padding-right: 1.5rem; grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    .sk-grid { grid-template-columns: 1fr 1fr; }
+    footer.site-footer { flex-direction: column; gap: 0.8rem; text-align: center; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <a href="index.html" class="nav-logo">deepthi<span class="dot">.</span>p</a>
+  <ul class="nav-links">
+    <li><a href="index.html">Home</a></li>
+    <li><a href="#skills">Skills</a></li>
+    <li><a href="Deepthi_P.pdf" target="_blank">Résumé</a></li>
+    <li><a href="#contact">Contact</a></li>
+  </ul>
+</nav>
+
+<section id="page-header">
+  <div class="ph-label reveal">02 — Work</div>
+  <h1 class="ph-title reveal">A console of <em>five</em> things I actually shipped.</h1>
+  <p class="ph-sub reveal">Type to search, or click a tag to filter by category. Every card links to the real repository.</p>
+</section>
+
+<div id="query-console" class="reveal">
+  <div class="qc-top">
+    <span class="qc-prompt">deepthi@portfolio:~/projects$</span>
+    <input id="queryInput" type="text" placeholder="search projects... try 'python' or 'agent'" autocomplete="off">
+  </div>
+  <div class="qc-filters">
+    <button class="qc-filter active" data-filter="all">all (5)</button>
+    <button class="qc-filter" data-filter="ai">ai / agents</button>
+    <button class="qc-filter" data-filter="ml">machine learning</button>
+    <button class="qc-filter" data-filter="da">data analysis</button>
+  </div>
+  <div class="qc-result-count">showing <b id="resultCount">5</b> of 5 projects</div>
+</div>
+
+<section id="projects">
+
+  <a class="project-card reveal" data-cat="ai" data-search="cipher autonomous multi agent ai platform fastapi codellama react streamlit team" href="https://github.com/deepthip2005" target="_blank">
+    <div class="pc-top">
+      <span class="pc-idx">01</span>
+      <span class="pc-cat cat-ai">AI / Agents</span>
+    </div>
+    <h3 class="pc-title">CIPHER: Autonomous Multi-Agent AI Platform</h3>
+    <p class="pc-desc">Built the Full Stack Development agent for a 5-agent autonomous platform as part of a 4-member team — FastAPI + CodeLlama generating React frontends, APIs, and DB schemas from plain English, with a shared Streamlit dashboard and JSON contract between agents.</p>
+    <div class="pc-tools"><span class="pc-tool">FastAPI</span><span class="pc-tool">CodeLlama</span><span class="pc-tool">React</span><span class="pc-tool">Streamlit</span></div>
+    <span class="pc-link">View repository <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+  </a>
+
+  <a class="project-card reveal" data-cat="ai" data-search="eye control gaze based mouse system opencv python accessibility webcam" href="https://github.com/deepthip2005" target="_blank">
+    <div class="pc-top">
+      <span class="pc-idx">02</span>
+      <span class="pc-cat cat-ai">AI / Agents</span>
+    </div>
+    <h3 class="pc-title">Eye Control: Gaze-Based Mouse System</h3>
+    <p class="pc-desc">Real-time eye-tracking system translating gaze movement into accurate mouse control using a standard webcam — built for users with limited mobility who lacked an accessible, low-cost cursor control option.</p>
+    <div class="pc-tools"><span class="pc-tool">Python</span><span class="pc-tool">OpenCV</span><span class="pc-tool">ML</span></div>
+    <span class="pc-link">View repository <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+  </a>
+
+  <a class="project-card reveal" data-cat="ml" data-search="house price prediction linear regression scikit learn real estate feature engineering" href="https://github.com/deepthip2005/house-price-prediction-ml" target="_blank">
+    <div class="pc-top">
+      <span class="pc-idx">03</span>
+      <span class="pc-cat cat-ml">Machine Learning</span>
+    </div>
+    <h3 class="pc-title">House Price Prediction</h3>
+    <p class="pc-desc">Linear Regression model in Python, with data cleaning and feature engineering across 5,000+ records — a data-backed tool that automates property valuation with high predictive accuracy.</p>
+    <div class="pc-tools"><span class="pc-tool">Python</span><span class="pc-tool">Scikit-Learn</span><span class="pc-tool">Linear Regression</span></div>
+    <span class="pc-link">View repository <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+  </a>
+
+  <a class="project-card reveal" data-cat="da" data-search="customer churn analysis pandas eda subscription billing contract" href="https://github.com/deepthip2005/subscription-churn-analysis" target="_blank">
+    <div class="pc-top">
+      <span class="pc-idx">04</span>
+      <span class="pc-cat cat-da">Data Analysis</span>
+    </div>
+    <h3 class="pc-title">Customer Churn Analysis</h3>
+    <p class="pc-desc">EDA on a subscription service's customer data with Pandas — found that 42.7% of month-to-month users churned due to high costs, leading to a proposed "Yearly Transition" discount strategy.</p>
+    <div class="pc-tools"><span class="pc-tool">Python</span><span class="pc-tool">Pandas</span><span class="pc-tool">EDA</span></div>
+    <span class="pc-link">View repository <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+  </a>
+
+  <a class="project-card reveal" data-cat="da" data-search="insight explorer ecommerce dashboard power bi power query excel sales regions" href="https://github.com/deepthip2005/Insight_Explorer_Ecommerce" target="_blank">
+    <div class="pc-top">
+      <span class="pc-idx">05</span>
+      <span class="pc-cat cat-da">Data Analysis</span>
+    </div>
+    <h3 class="pc-title">Insight Explorer: E-commerce Dashboard</h3>
+    <p class="pc-desc">Cleaned 50,000+ rows of raw Excel sales data with Power Query and built a real-time interactive Power BI dashboard, letting stakeholders instantly spot underperforming regions and products.</p>
+    <div class="pc-tools"><span class="pc-tool">Power BI</span><span class="pc-tool">Power Query</span><span class="pc-tool">Excel</span></div>
+    <span class="pc-link">View repository <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+  </a>
+
+</section>
+
+<section id="skills">
+  <div class="sk-label reveal">03 — Toolkit</div>
+  <h2 class="sk-title reveal">What's under the hood.</h2>
+  <div class="sk-grid reveal">
+    <div class="sk-group">
+      <div class="sk-group-name">Languages & DBs</div>
+      <div class="sk-pills"><span class="sk-pill">Python</span><span class="sk-pill">SQL</span><span class="sk-pill">HTML/CSS</span><span class="sk-pill">PostgreSQL</span><span class="sk-pill">MySQL</span></div>
+    </div>
+    <div class="sk-group">
+      <div class="sk-group-name">AI & ML</div>
+      <div class="sk-pills"><span class="sk-pill">Scikit-Learn</span><span class="sk-pill">Linear Regression</span><span class="sk-pill">NLP</span><span class="sk-pill">LangChain</span></div>
+    </div>
+    <div class="sk-group">
+      <div class="sk-group-name">Backend & Infra</div>
+      <div class="sk-pills"><span class="sk-pill">FastAPI</span><span class="sk-pill">Flask</span><span class="sk-pill">Node.js</span><span class="sk-pill">REST APIs</span><span class="sk-pill">Docker</span></div>
+    </div>
+    <div class="sk-group">
+      <div class="sk-group-name">Visualization</div>
+      <div class="sk-pills"><span class="sk-pill">Power BI</span><span class="sk-pill">Power Query</span><span class="sk-pill">Excel</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="contact">
+  <div class="ct-label reveal">04 — Contact</div>
+  <h2 class="ct-title reveal">Got a dataset with a story in it? <em>Let's find it.</em></h2>
+  <p class="ct-sub reveal">Open to internships, collaborations, and interesting problems.</p>
+  <div class="ct-actions reveal">
+    <a href="mailto:deepthiputti7890@gmail.com" class="btn btn-fill">Email me</a>
+    <a href="Deepthi_P.pdf" target="_blank" class="btn btn-line">Download résumé</a>
+    <a href="https://www.linkedin.com/in/deepthiputti" target="_blank" class="btn btn-line">LinkedIn</a>
+    <a href="https://github.com/deepthip2005" target="_blank" class="btn btn-line">GitHub</a>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <span>Deepthi Putti © 2026</span>
+  <a href="index.html">Back to top ↑</a>
+</footer>
+
+<script>
+  // ===== FILTER + SEARCH LOGIC =====
+  const cards = Array.from(document.querySelectorAll('.project-card'));
+  const filterBtns = Array.from(document.querySelectorAll('.qc-filter'));
+  const input = document.getElementById('queryInput');
+  const resultCount = document.getElementById('resultCount');
+  let activeFilter = 'all';
+
+  function applyFilters() {
+    const query = input.value.trim().toLowerCase();
+    let visible = 0;
+    cards.forEach(card => {
+      const cat = card.dataset.cat;
+      const haystack = card.dataset.search;
+      const matchesFilter = activeFilter === 'all' || cat === activeFilter;
+      const matchesQuery = !query || haystack.includes(query);
+      const show = matchesFilter && matchesQuery;
+      card.hidden = !show;
+      if (show) visible++;
+    });
+    resultCount.textContent = visible;
+    const grid = document.getElementById('projects');
+    let empty = document.querySelector('.empty-state');
+    if (visible === 0 && !empty) {
+      empty = document.createElement('div');
+      empty.className = 'empty-state';
+      empty.textContent = 'no projects match that query — try clearing the search';
+      grid.appendChild(empty);
+    } else if (visible > 0 && empty) {
+      empty.remove();
+    }
+  }
+
+  filterBtns.forEach(btn => {
+    btn.addEventListener('click', () => {
+      filterBtns.forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      activeFilter = btn.dataset.filter;
+      applyFilters();
+    });
+  });
+
+  input.addEventListener('input', applyFilters);
+
+  // ===== SCROLL REVEAL =====
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((e, i) => {
+      if (e.isIntersecting) {
+        setTimeout(() => e.target.classList.add('visible'), i * 60);
+      }
+    });
+  }, { threshold: 0.12 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
